@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selectra - Checklist Commerciale</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <!-- Header avec logo et timer -->
+        <header class="header-checklist">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="logo">⚡ SELECTRA</h1>
+                    <span class="subtitle">Checklist Commerciale</span>
+                </div>
+                <div class="timer-section">
+                    <div class="timer-display" id="global-timer">⏱️ 00:00</div>
+                    <button class="timer-btn" id="timer-toggle">▶️ Démarrer</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Barre latérale centrée unique -->
+        <main class="checklist-sidebar">
+            <!-- Section Informations Client -->
+            <section class="checklist-section client-section">
+                <h2 class="section-title">👤 Informations Client</h2>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label">Nom complet</label>
+                        <input type="text" class="form-control" name="client_nom" placeholder="Nom et prénom">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Téléphone</label>
+                        <input type="tel" class="form-control" name="client_tel" placeholder="06 12 34 56 78">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="client_email" placeholder="client@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Adresse</label>
+                        <input type="text" class="form-control" name="client_adresse" placeholder="Adresse complète">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PDL/PCE</label>
+                        <div class="input-grid">
+                            <input type="text" class="form-control" name="client_pdl" placeholder="PDL (14 chiffres)">
+                            <input type="text" class="form-control" name="client_pce" placeholder="PCE (14 chiffres)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Consommation</label>
+                        <div class="input-grid">
+                            <input type="number" class="form-control" name="client_conso_elec" placeholder="kWh électricité">
+                            <input type="number" class="form-control" name="client_conso_gaz" placeholder="kWh gaz">
+                        </div>
+                    </div>
+                </div>
+                <div class="section-counter">
+                    <span class="counter-text">Complété: <span id="client-counter">0</span>/8</span>
+                    <div class="counter-bar">
+                        <div class="counter-fill" id="client-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Accords RGPD -->
+            <section class="checklist-section accords-section">
+                <h2 class="section-title">✅ Accords & RGPD</h2>
+                <div class="section-content">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="accord_enregistrement">
+                        <span class="checkmark"></span>
+                        Client accepte l'enregistrement de l'appel
+                    </label>
+                    <label class="checkbox-item obligatoire">
+                        <input type="checkbox" name="accord_rgpd" required>
+                        <span class="checkmark"></span>
+                        <strong>Autorisation collecte données RGPD (OBLIGATOIRE)</strong>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="accord_reseau">
+                        <span class="checkmark"></span>
+                        Autorisation accès réseau Enedis/GRDF (6 mois)
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="accord_paiements">
+                        <span class="checkmark"></span>
+                        Client à jour de ses paiements
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="accord_iban">
+                        <span class="checkmark"></span>
+                        IBAN collecté et validé
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="accord_final">
+                        <span class="checkmark"></span>
+                        Enregistrement autorisé comme preuve de consentement
+                    </label>
+                </div>
+                <div class="section-counter">
+                    <span class="counter-text">Complété: <span id="accords-counter">0</span>/6</span>
+                    <div class="counter-bar">
+                        <div class="counter-fill" id="accords-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Services Payants -->
+            <section class="checklist-section services-section">
+                <h2 class="section-title">💰 Services Payants</h2>
+                <div class="services-alert" id="services-alert">
+                    <p>⚠️ Minimum 2 services payants requis</p>
+                </div>
+
+                <!-- AXA Assistance - Menu déroulant -->
+                <div class="service-item">
+                    <div class="service-header">
+                        <label class="service-label">🛡️ AXA Assistance</label>
+                        <span class="service-price" id="axa-price">-</span>
+                    </div>
+                    <select class="form-control service-select" name="axa_forfait" id="axa-select">
+                        <option value="none">Aucune</option>
+                        <option value="formule1">Formule 1 - 3,99€/mois</option>
+                        <option value="formule2">Formule 2 - 6,99€/mois</option>
+                    </select>
+                </div>
+
+                <!-- Compensation Carbone - Menu déroulant -->
+                <div class="service-item">
+                    <div class="service-header">
+                        <label class="service-label">🌱 Compensation Carbone</label>
+                        <span class="service-price" id="offset-price">-</span>
+                    </div>
+                    <select class="form-control service-select" name="offset_palier" id="offset-select">
+                        <option value="none">Aucune</option>
+                        <option value="electricite">Électricité - 2,24t - 2,99€/mois</option>
+                        <option value="gaz">Gaz - 2,98t - 3,99€/mois</option>
+                        <option value="maison">Maison Nourriture - 3,59t - 4,99€/mois</option>
+                        <option value="elec_gaz">Électricité + Gaz - 4,49t - 5,99€/mois</option>
+                        <option value="perso">Perso - 5,4t - 7,50€/mois</option>
+                        <option value="foyer">Foyer - 11,34t - 14,99€/mois</option>
+                    </select>
+                </div>
+
+                <!-- Mon Conseiller Perso - Checkbox standard -->
+                <div class="service-item">
+                    <label class="checkbox-item service-checkbox">
+                        <input type="checkbox" name="service_mcp">
+                        <span class="checkmark"></span>
+                        <span class="service-label">👨‍💼 Mon Conseiller Perso</span>
+                        <span class="service-price">6€ - 14€/mois</span>
+                    </label>
+                </div>
+
+                <div class="services-summary" id="services-summary">
+                    <div class="services-count">
+                        <span>Services sélectionnés: <strong id="services-count">0</strong>/3</span>
+                    </div>
+                    <div class="services-status" id="services-status">
+                        <span class="status status--warning">⚠️ Minimum requis: 2 services</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Mentions Légales -->
+            <section class="checklist-section mentions-section">
+                <h2 class="section-title">📋 Mentions Légales</h2>
+                <div class="section-content">
+                    <label class="checkbox-item mentions-item" id="mentions-axa" style="display: none;">
+                        <input type="checkbox" name="mentions_axa">
+                        <span class="checkmark"></span>
+                        Mentions légales AXA lues et acceptées
+                        <span class="mentions-timer" data-service="axa">⏱️ 30s requis</span>
+                    </label>
+                    <label class="checkbox-item mentions-item" id="mentions-carbone" style="display: none;">
+                        <input type="checkbox" name="mentions_carbone">
+                        <span class="checkmark"></span>
+                        Mentions légales Compensation Carbone lues et acceptées
+                        <span class="mentions-timer" data-service="carbone">⏱️ 20s requis</span>
+                    </label>
+                    <div class="mentions-placeholder" id="mentions-placeholder">
+                        <p>Les mentions légales apparaîtront selon les services sélectionnés</p>
+                    </div>
+                </div>
+                <div class="section-counter">
+                    <span class="counter-text">Complété: <span id="mentions-counter">0</span>/5</span>
+                    <div class="counter-bar">
+                        <div class="counter-fill" id="mentions-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Signatures SMS -->
+            <section class="checklist-section sms-section">
+                <h2 class="section-title">📱 Signatures SMS</h2>
+                <div class="section-content">
+                    <label class="checkbox-item sms-item" id="sms-axa" style="display: none;">
+                        <input type="checkbox" name="sms_axa">
+                        <span class="checkmark"></span>
+                        SMS signature AXA confirmé par le client
+                    </label>
+                    <label class="checkbox-item sms-item" id="sms-carbone" style="display: none;">
+                        <input type="checkbox" name="sms_carbone">
+                        <span class="checkmark"></span>
+                        SMS signature Compensation Carbone confirmé
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="sms_contrat">
+                        <span class="checkmark"></span>
+                        SMS signature contrat énergie confirmé
+                    </label>
+                    <div class="sms-placeholder" id="sms-placeholder">
+                        <p>Les signatures SMS apparaîtront selon les services sélectionnés</p>
+                    </div>
+                </div>
+                <div class="section-counter">
+                    <span class="counter-text">Complété: <span id="sms-counter">0</span>/3</span>
+                    <div class="counter-bar">
+                        <div class="counter-fill" id="sms-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Étapes Commerciales -->
+            <section class="checklist-section etapes-section">
+                <h2 class="section-title">🎯 Étapes Commerciales</h2>
+                <div class="section-content">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_accueil">
+                        <span class="checkmark"></span>
+                        Accueil et présentation (30s minimum)
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_besoins">
+                        <span class="checkmark"></span>
+                        Analyse des besoins client
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_simulation">
+                        <span class="checkmark"></span>
+                        Simulation et présentation offre
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_objections">
+                        <span class="checkmark"></span>
+                        Traitement des objections
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_services">
+                        <span class="checkmark"></span>
+                        Présentation services additionnels
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_finalisation">
+                        <span class="checkmark"></span>
+                        Finalisation et récapitulatif
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="etape_signature">
+                        <span class="checkmark"></span>
+                        Signatures et validation finale
+                    </label>
+                </div>
+                <div class="section-counter">
+                    <span class="counter-text">Complété: <span id="etapes-counter">0</span>/7</span>
+                    <div class="counter-bar">
+                        <div class="counter-fill" id="etapes-fill"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Notes -->
+            <section class="checklist-section notes-section">
+                <h2 class="section-title">📝 Notes & Observations</h2>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label">Notes commerciales</label>
+                        <textarea class="form-control" name="notes_commerciales" rows="3" placeholder="Notes sur l'échange commercial..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Objections rencontrées</label>
+                        <textarea class="form-control" name="notes_objections" rows="2" placeholder="Objections du client et réponses apportées..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Points d'attention</label>
+                        <textarea class="form-control" name="notes_attention" rows="2" placeholder="Éléments importants à retenir..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions finales -->
+            <section class="actions-section">
+                <div class="progress-global">
+                    <h3>📊 Progression Globale</h3>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total</span>
+                            <span class="stat-value" id="total-progress">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Obligatoires</span>
+                            <span class="stat-value" id="required-progress">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Services</span>
+                            <span class="stat-value" id="services-progress">Non conforme</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-global">
+                        <div class="progress-fill-global" id="global-progress-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn--secondary" id="btn-save">💾 Sauvegarder</button>
+                    <button class="btn btn--secondary" id="btn-export">📄 Exporter</button>
+                    <button class="btn btn--primary" id="btn-validate" disabled>✅ Valider & Finaliser</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="checklist-footer">
+            <p>⚡ SELECTRA - Checklist Commerciale v2.0</p>
+            <div class="auto-save-indicator">
+                <span id="save-status">💾 Sauvegarde automatique</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
